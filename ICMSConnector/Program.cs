@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
 using ICMSConnector.Controllers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,18 +13,31 @@ namespace ICMSConnector
         public static void Main(string[] args)
         {
             AuthController auth = new AuthController();
-            PingController ping = new PingController();
-            HandoffController handoff = new HandoffController();
-            HandbackController handback = new HandbackController();
+            IcmsClient icmsClient = new IcmsClient();
+            HttpClient httpClient = auth.HttpClient;
+            try
+            {
+                var responseText = icmsClient.Ping(httpClient).Result;
+                File.WriteAllText(@"Files\Output\PingOutput.txt", responseText);
 
-            var responseText = ping.Ping(auth.HttpClient);
-            var HandoffResponse = handoff.Handoff(auth.HttpClient).Result;
+                var uploadResponse = icmsClient.UploadFile(httpClient).Result;
+                var uploadResult = JsonConvert.SerializeObject(uploadResponse);
 
-            var ho_json = JsonConvert.SerializeObject(HandoffResponse);
-            File.WriteAllText(@"Files\Output\HandoffOutput.txt", ho_json);
-            var HandbackResponse = handback.RunHandback(auth.HttpClient).Result;
-            var hb_json = (JObject) JsonConvert.DeserializeObject(HandbackResponse);
-            File.WriteAllBytes(@"Files\Output\HandbackOutput.txt",Convert.FromBase64String(hb_json["Content"].ToString()));
+                File.WriteAllText(@"Files\Output\FileUploadOutput.txt", uploadResult);
+
+                var handbackResponse = icmsClient.GetLocFilesWithContent(httpClient, true, 4001072).Result;
+                var hbJson = (JObject) JsonConvert.DeserializeObject(handbackResponse);
+                //File.WriteAllBytes(@"Files\Output\HandbackOutput.txt",Convert.FromBase64String(hb_json["Content"].ToString()));
+
+                var fileIds = new List<long?> {4001072};
+                var resultOfUpdate = icmsClient.SetLocFileStatus(httpClient, "CheckedIn", fileIds);
+
+                var locFile = icmsClient.GetLocFilesWithContent(httpClient,true,4001072);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(string.Format(@"Exception: {0} has occurred",exception.Message));
+            }                      
         }
     }
 }

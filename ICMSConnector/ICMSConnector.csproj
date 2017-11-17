@@ -84,12 +84,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AuthController.cs" />
-    <Compile Include="Controllers\HandbackController.cs" />
-    <Compile Include="Controllers\HandoffController.cs" />
-    <Compile Include="Interfaces\IHandbackManager.cs" />
-    <Compile Include="Interfaces\IHandoffManager.cs" />
-    <Compile Include="Interfaces\IPing.cs" />
-    <Compile Include="Controllers\PingController.cs" />
+    <Compile Include="Controllers\ICMSClient.cs" />
+    <Compile Include="Interfaces\IICMSClient.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -110,13 +106,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Files\Source\test.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Files\Destination\" />
-    <Folder Include="Files\Output\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

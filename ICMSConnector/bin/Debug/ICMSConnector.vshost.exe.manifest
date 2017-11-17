@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ICMSConnector.exe" size="9648">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ICMSConnector.exe" size="13744">
       <assemblyIdentity name="ICMSConnector" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>EQ/xdbX5lvPKPr8X/jl5YEdws63G2y/7JW6yNgYz3ow=</dsig:DigestValue>
+        <dsig:DigestValue>tTEDOqNAQlKkxyuQTqa6G9bEL+exLG+jRGzpoC3b6Z8=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -89,15 +89,6 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="Files\Source\test.txt" size="9">
-    <hash>
-      <dsig:Transforms>
-        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-      </dsig:Transforms>
-      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>saslxVkTyVzGkT8dvOm+8YXr8ApkVTqO8ZQZPlLqUBU=</dsig:DigestValue>
-    </hash>
-  </file>
   <file name="ICMSConnector.exe.config" size="189">
     <hash>
       <dsig:Transforms>
