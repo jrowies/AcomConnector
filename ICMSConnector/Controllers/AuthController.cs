@@ -20,7 +20,7 @@ namespace ICMSConnector.Controllers
             var authContext = new AuthenticationContext("https://login.microsoftonline.com/microsoft.onmicrosoft.com");
 
             //Specify authentication information and user credentials to get usable token 
-            var response = authContext.AcquireTokenAsync("https://icmsauthorizer.azurewebsites.net/", "a8678b53-df7b-4a0c-be1a-644c9bd2e6d9", new UserPasswordCredential("awscfm@microsoft.com", "NewYearLongRun17#"));
+            var response = authContext.AcquireTokenAsync("https://icmsauthorizer.azurewebsites.net/", "a8678b53-df7b-4a0c-be1a-644c9bd2e6d9", new UserPasswordCredential("yourusername","yourpassword"));
             var token = response.Result.AccessToken;
 
             //Setting up HttpClient
