@@ -15,6 +15,11 @@ namespace ICMSConnector.Controllers
 {
     class IcmsClient: IICMSClient
     {
+        /// <summary>
+        /// Method to upload file to iCMS 
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <returns></returns>
         public async Task<string> UploadFile(HttpClient httpClient)
         {
             string path = (@"Files\Source\test.txt"); //Path of the file to be picked up, folder in bin/debug
@@ -52,6 +57,11 @@ namespace ICMSConnector.Controllers
             return stringResponse.Result; //Get string from awaitable Task
         }
 
+        /// <summary>
+        /// Ping the Translation Service API
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <returns></returns>
         public async Task<string> Ping(HttpClient httpClient)
         {
             var response = await httpClient.GetAsync("api/Ping"); //Call the ping API to check if the translation service is up
@@ -59,26 +69,48 @@ namespace ICMSConnector.Controllers
             return responseString.Result;
         }
 
+        /// <summary>
+        /// Get files with an input status
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
         public async Task<string> GetFileWithStatus(HttpClient httpClient, string status)
         {
             var response = await httpClient.GetAsync(string.Format(@"api/Files/Filestatus?status={0}&count={1}", status,100)); //Get Files with status and specify count retrieved
             var responseString = response.Content.ReadAsStringAsync();
             return responseString.Result;
         }
+
+        /// <summary>
+        /// Get Loc Files with an input status and a limit
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
         public async Task<string> GetLocFilesWithStatus(HttpClient httpClient, string status)
         {
-            var response = await httpClient.GetAsync(string.Format(@"api/LocFiles/Locstatus?status={0}&count={1}", status, 100));//Get LocFiles with status and specify count retrieved
+            //Get LocFiles with status and specify count retrieved
+            var response = await httpClient.GetAsync(string.Format(@"api/LocFiles/Locstatus?status={0}&count={1}", status, 100));
             var responseString = response.Content.ReadAsStringAsync();
             return responseString.Result;
         }
 
+
+        /// <summary>
+        /// Setting status for a LocFile and a limit
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <param name="status"></param>
+        /// <param name="fileIds"></param>
+        /// <returns></returns>
         public async Task<string> SetLocFileStatus(HttpClient httpClient,string status, IList<long?> fileIds)
         {
             var locFileStatus = new LocFilesStatus //Create a Loc Status object with all the fileIds that have to be updated, the status and message
             {
                 LocFileIds = fileIds.ToArray(),
                 LocStatus = status,
-                Message = "Setting loc file status from a Test client"
+                Message = "Setting loc file status from a Test client" //Setting message
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(locFileStatus));
@@ -89,9 +121,16 @@ namespace ICMSConnector.Controllers
             return responseString.Result;
         }
 
+        /// <summary>
+        /// Get LocFile which has gone through the pipe from Handoff to Handback. Option parameter to get aggregated locAction
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <param name="locAction"></param>
+        /// <param name="fileId"></param>
+        /// <returns></returns>
         public Task<string> GetLocFilesWithContent(HttpClient httpClient, bool locAction, int fileId)
         {
-            var response = httpClient.GetAsync(string.Format(@"api/LocFiles/{0}?getLocAction={1}", fileId, locAction));
+            var response = httpClient.GetAsync($"api/LocFiles/{fileId}?getLocAction={locAction}");
             var responseString = response.Result.Content.ReadAsStringAsync();
             return responseString;
         }
