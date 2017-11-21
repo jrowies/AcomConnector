@@ -14,6 +14,6 @@ namespace ICMSConnector.Interfaces
         Task<string> Ping(HttpClient httpClient);
         Task<string> GetFileWithStatus(HttpClient httpClient, string status);
         Task<string> GetLocFilesWithStatus(HttpClient httpClient, string status);
-        Task<string> SetLocFileStatus(HttpClient httpClient, string status, IList<long?> fileIds);
+        Task<string> SetLocFileStatus(HttpClient httpClient, string status, IList<long?> fileIds, bool propagateToChildren);
     }
 }

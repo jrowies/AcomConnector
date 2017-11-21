@@ -73,7 +73,7 @@ namespace ICMSConnector.Controllers
         /// Get files with an input status
         /// </summary>
         /// <param name="httpClient"></param>
-        /// <param name="status"></param>
+        /// <param name="status">Only one status supported: ReIndex</param>
         /// <returns></returns>
         public async Task<string> GetFileWithStatus(HttpClient httpClient, string status)
         {
@@ -86,7 +86,7 @@ namespace ICMSConnector.Controllers
         /// Get Loc Files with an input status and a limit
         /// </summary>
         /// <param name="httpClient"></param>
-        /// <param name="status"></param>
+        /// <param name="status">input status</param>
         /// <returns></returns>
         public async Task<string> GetLocFilesWithStatus(HttpClient httpClient, string status)
         {
@@ -98,13 +98,14 @@ namespace ICMSConnector.Controllers
 
 
         /// <summary>
-        /// Setting status for a LocFile and a limit
+        /// Setting status for LocFiles based on a list of loc fileIds
         /// </summary>
         /// <param name="httpClient"></param>
-        /// <param name="status"></param>
-        /// <param name="fileIds"></param>
+        /// <param name="status">Status to be updated (CheckedIn, HandedBack etc.)</param>
+        /// <param name="fileIds">A max of 4000 id's can be updated in a single call</param>
+        /// <param name="propagateToChildren">Whether loc action should be propagated to dependents</param>
         /// <returns></returns>
-        public async Task<string> SetLocFileStatus(HttpClient httpClient,string status, IList<long?> fileIds)
+        public async Task<string> SetLocFileStatus(HttpClient httpClient,string status, IList<long?> fileIds, bool propagateToChildren)
         {
             var locFileStatus = new LocFilesStatus //Create a Loc Status object with all the fileIds that have to be updated, the status and message
             {
@@ -116,17 +117,17 @@ namespace ICMSConnector.Controllers
             var content = new StringContent(JsonConvert.SerializeObject(locFileStatus));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            var response = await httpClient.PutAsync("api/LocFiles/LocStatus", content); //Call LocStatus API
+            var response = await httpClient.PutAsync($"api/LocFiles/LocStatus?propagateToChildren={propagateToChildren}", content); //Call LocStatus API
             var responseString = response.Content.ReadAsStringAsync();
             return responseString.Result;
         }
 
         /// <summary>
-        /// Get LocFile which has gone through the pipe from Handoff to Handback. Option parameter to get aggregated locAction
+        /// Get LocFile which has gone through the pipe from Handoff to Handback.
         /// </summary>
         /// <param name="httpClient"></param>
-        /// <param name="locAction"></param>
-        /// <param name="fileId"></param>
+        /// <param name="locAction"> Aggregated locAction (loc action resolved on loc file then file then project then repo level)</param>
+        /// <param name="fileId">Id of the loc file to be retrieved</param>
         /// <returns></returns>
         public Task<string> GetLocFilesWithContent(HttpClient httpClient, bool locAction, int fileId)
         {
