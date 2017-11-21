@@ -30,19 +30,17 @@ namespace ICMSConnector
                 File.WriteAllText(@"Files\Output\FileUploadOutput.txt", uploadResponse);
 
                 //Get Handback response
-                //If the file hasn't gone through HO and HB process the method will return a 404 error
-                var handbackResponse = icmsClient.GetLocFilesWithContent(httpClient, true, 4001072).Result;
-                var hbJson = (JObject) JsonConvert.DeserializeObject(handbackResponse);
-                if (hbJson["Content"] == null)
+                //If the file hasn't gone through HO and HB process the response will be empty
+                var handbackResponse = icmsClient.GetLocFilesWithContent(httpClient, true, 4001072).Result;             
+                if (handbackResponse.Equals("Not Found"))
                 {
-                    File.WriteAllText(@"Files\Output\HandbackOutput.txt", "File not found");
+                    File.WriteAllText(@"Files\Output\HandbackOutput.txt", "Localized file not found");
                 }
                 else
                 {
+                    var hbJson = (JObject)JsonConvert.DeserializeObject(handbackResponse);
                     File.WriteAllBytes(@"Files\Output\HandbackOutput.txt",Convert.FromBase64String(hbJson["Content"].ToString()));
                 }
-
-
                 var fileIds = new List<long?> {4001072};
                 var resultOfUpdate = icmsClient.SetLocFileStatus(httpClient, "CheckedIn", fileIds);
             }

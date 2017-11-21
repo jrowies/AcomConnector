@@ -13,7 +13,7 @@ using TranslationService.Models;
 
 namespace ICMSConnector.Controllers
 {
-    class IcmsClient: IICMSClient
+    class IcmsClient: IIcmsClient
     {
         /// <summary>
         /// Method to upload file to iCMS 
@@ -131,6 +131,10 @@ namespace ICMSConnector.Controllers
         public Task<string> GetLocFilesWithContent(HttpClient httpClient, bool locAction, int fileId)
         {
             var response = httpClient.GetAsync($"api/LocFiles/{fileId}?getLocAction={locAction}");
+            if (!response.Result.IsSuccessStatusCode)
+            {
+                return Task.FromResult(response.Result.ReasonPhrase);
+            }
             var responseString = response.Result.Content.ReadAsStringAsync();
             return responseString;
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ICMSConnector.Interfaces
 {
-    interface IICMSClient
+    interface IIcmsClient
     {
        Task<string> UploadFile(HttpClient httpClient);
         Task<string> GetLocFilesWithContent(HttpClient httpClient, bool locAction, int fileId);
