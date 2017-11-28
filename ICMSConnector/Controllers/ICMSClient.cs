@@ -26,33 +26,47 @@ namespace ICMSConnector.Controllers
             var bytes = File.ReadAllBytes(path);
             var icmsFileIdentifier = new IcmsFileIdentifier //ICMS supplied model to store File ID data
             {
-                AssetId = "AcomTestConnectorID", //AssetID to identify file in Vantage Point (ICMS UI)
-                HostFileReference = @"\\Acom\Files\Test\test.txt", //Host File Reference + Host File Revision + Host Content Store is the unqiue key to identify a file in ICMS
+                AssetId = "AcomTestConnectorID5", //AssetID to identify file in Vantage Point (ICMS UI)
+                HostFileReference = @"\\Acom\Files\Test\AcomTestInfo.txt", //Host File Reference + Host File Revision + Host Content Store is the unqiue key to identify a file in ICMS
                 Locale = "en-us", //Source file locale
                 HostFileRevision = 0, //ICMS supports storing different versions of files, should be mapped to the version of file in source location
-                ContentType = "Article", //The type of file, can be Article, Art, Token,Manifest, Video
+                ContentType = "Article", //The type of file, can be Article, Art, Token, Manifest, Video  
+                                        
             };
 
-            var icmsMetadata = new IcmsFileMetadata //Model for the metdata about the file
+            var icmsMetadata = new IcmsFileMetadataWithLocalizationInfo //Model for the metdata about the file
             {
                 FileIdentifier = icmsFileIdentifier, //Set File ID data 
                 Localizable = true, 
                 ContentGroup = "Pilot2HO1_IA_CP66", //High level file grouping in ICMS
                 Priority = "1",
-                HostFileTags = "exampleTags", //Localization priority
+                HostFileTags = "Acom, Test, Connector", //Localization priority
+                ReadyForLoc = true,
+                IsLead = true,
+                LocaleList = new List<string>{ "de-DE"},
+                TranslationOptions = new TranslationOptions
+                {
+                    RecycleContent = true,
+                    TranslationType = "MT",
+                    RecycleContentAudience = "Production Pilot"
+                },
+                Partner = "C+E Content - Continuous Production"             
             };
 
             var icmsFile = new IcmsFile //Model for the file to be uploaded to iCMS
             {
                 Content = bytes,
-                Metadata = icmsMetadata //Set metadata
+                Metadata = icmsMetadata //Set metadata                
             };
 
-            var data = JsonConvert.SerializeObject(icmsFile); //Serializing file into a JSON string
+            //List of files to be uploaded
+            var icmsList = new List<IcmsFile> {icmsFile};
+
+            var data = JsonConvert.SerializeObject(icmsList); //Serializing file into a JSON string
             var content = new StringContent(data, Encoding.UTF8); //Create formatted string data appropriate for http server/client communication
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json"); //Specifiy content type
 
-            var response = await httpClient.PostAsync("api/Files/", content); //Call Files API 
+            var response = await httpClient.PostAsync("api/FilesWithLocInfo/", content); //Call Files API 
             var stringResponse = response.Content.ReadAsStringAsync(); //Serialize the response content
             return stringResponse.Result; //Get string from awaitable Task
         }
