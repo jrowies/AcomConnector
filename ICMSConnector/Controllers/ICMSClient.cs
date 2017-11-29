@@ -26,31 +26,31 @@ namespace ICMSConnector.Controllers
             var bytes = File.ReadAllBytes(path);
             var icmsFileIdentifier = new IcmsFileIdentifier //ICMS supplied model to store File ID data
             {
-                AssetId = "AcomTestConnectorID5", //AssetID to identify file in Vantage Point (ICMS UI)
-                HostFileReference = @"\\Acom\Files\Test\AcomTestInfo.txt", //Host File Reference + Host File Revision + Host Content Store is the unqiue key to identify a file in ICMS
+                AssetId = "SourceAsset", //AssetID to identify file in Vantage Point (ICMS UI)
+                HostFileReference = @"\\Acom\Files\Source\test.txt", //Host File Reference + Host File Revision + Host Content Store is the unqiue key to identify a file in ICMS
                 Locale = "en-us", //Source file locale
                 HostFileRevision = 0, //ICMS supports storing different versions of files, should be mapped to the version of file in source location
-                ContentType = "Article", //The type of file, can be Article, Art, Token, Manifest, Video  
-                                        
+                ContentType = "Article" //The type of file, can be all ICMS supported content types                                       
             };
 
             var icmsMetadata = new IcmsFileMetadataWithLocalizationInfo //Model for the metdata about the file
             {
                 FileIdentifier = icmsFileIdentifier, //Set File ID data 
                 Localizable = true, 
-                ContentGroup = "Pilot2HO1_IA_CP66", //High level file grouping in ICMS
-                Priority = "1",
-                HostFileTags = "Acom, Test, Connector", //Localization priority
+                ContentGroup = "GHM", //High level file grouping in ICMS
+                Priority = "2",//Localization priority
+                HostFileTags = "Acom; Test; Connector", 
                 ReadyForLoc = true,
                 IsLead = true,
-                LocaleList = new List<string>{ "de-DE"},
+                LocaleList = new List<string>{ "ko-KR" },
+                ParentFileIdentifier = null,
                 TranslationOptions = new TranslationOptions
                 {
                     RecycleContent = true,
                     TranslationType = "MT",
                     RecycleContentAudience = "Production Pilot"
                 },
-                Partner = "C+E Content - Continuous Production"             
+                Partner = "C+E Content - Continuous Production"
             };
 
             var icmsFile = new IcmsFile //Model for the file to be uploaded to iCMS
@@ -132,6 +132,13 @@ namespace ICMSConnector.Controllers
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             var response = await httpClient.PutAsync($"api/LocFiles/LocStatus?propagateToChildren={propagateToChildren}", content); //Call LocStatus API
+            var responseString = response.Content.ReadAsStringAsync();
+            return responseString.Result;
+        }
+
+        public async Task<string> GetFailedValidationFiles(HttpClient httpClient)
+        {
+            var response = await httpClient.GetAsync(@"api/FilesFailedValidation");
             var responseString = response.Content.ReadAsStringAsync();
             return responseString.Result;
         }

@@ -15,5 +15,6 @@ namespace ICMSConnector.Interfaces
         Task<string> GetFileWithStatus(HttpClient httpClient, string status);
         Task<string> GetLocFilesWithStatus(HttpClient httpClient, string status);
         Task<string> SetLocFileStatus(HttpClient httpClient, string status, IList<long?> fileIds, bool propagateToChildren);
+        Task<string> GetFailedValidationFiles(HttpClient httpClient);
     }
 }

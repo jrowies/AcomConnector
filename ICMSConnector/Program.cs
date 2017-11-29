@@ -29,11 +29,13 @@ namespace ICMSConnector
                 var uploadResponse = icmsClient.UploadFile(httpClient).Result;
                 File.WriteAllText(@"Files\Output\FileUploadOutput.txt", uploadResponse);
 
+                //var failedValidation = icmsClient.GetFailedValidationFiles(httpClient);
+               // var validationResponse = failedValidation.Result;
 
 
                 //Get Handback response
                 //If the file hasn't gone through HO and HB process the response will be empty
-                /*var handbackResponse = icmsClient.GetLocFilesWithContent(httpClient, true, 4001282).Result;            
+                /*var handbackResponse = icmsClient.GetLocFilesWithContent(httpClient, true, 4001285).Result;            
                 if (handbackResponse.Equals("Not Found"))
                 {
                     File.WriteAllText(@"Files\Output\HandbackOutput.txt", "Localized file not found");
@@ -42,9 +44,9 @@ namespace ICMSConnector
                 {
                     var hbJson = (JObject)JsonConvert.DeserializeObject(handbackResponse);
                     File.WriteAllBytes(@"Files\Output\HandbackOutput.txt",Convert.FromBase64String(hbJson["Content"].ToString()));
-                    var fileIds = new List<long?> { 4001072 };
+                    var fileIds = new List<long?> { 4001285 };
                     var resultOfUpdate = icmsClient.SetLocFileStatus(httpClient, "CheckedIn", fileIds, false);
-                }   */           
+                }  */
             }
             catch (Exception exception)
             {
