@@ -13,7 +13,7 @@ namespace ICMSConnector.Interfaces
         Task<string> GetLocFilesWithContent(HttpClient httpClient, bool locAction, int fileId);
         Task<string> Ping(HttpClient httpClient);
         Task<string> GetFileWithStatus(HttpClient httpClient, string status);
-        Task<string> GetLocFilesWithStatus(HttpClient httpClient, string status);
+        Task<string> GetLocFilesWithStatus(HttpClient httpClient, string status, int count);
         Task<string> SetLocFileStatus(HttpClient httpClient, string status, IList<long?> fileIds, bool propagateToChildren);
         Task<string> GetFailedValidationFiles(HttpClient httpClient);
     }

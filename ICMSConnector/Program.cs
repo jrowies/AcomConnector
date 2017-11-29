@@ -26,8 +26,8 @@ namespace ICMSConnector
                 File.WriteAllText(@"Files\Output\PingOutput.txt", responseText);
 
                 //Upload file and write result to a text file
-                var uploadResponse = icmsClient.UploadFile(httpClient).Result;
-                File.WriteAllText(@"Files\Output\FileUploadOutput.txt", uploadResponse);
+               // var uploadResponse = icmsClient.UploadFile(httpClient).Result;
+               // File.WriteAllText(@"Files\Output\FileUploadOutput.txt", uploadResponse);
 
                 //var failedValidation = icmsClient.GetFailedValidationFiles(httpClient);
                // var validationResponse = failedValidation.Result;
@@ -35,10 +35,12 @@ namespace ICMSConnector
 
                 //Get Handback response
                 //If the file hasn't gone through HO and HB process the response will be empty
-                /*var handbackResponse = icmsClient.GetLocFilesWithContent(httpClient, true, 4001285).Result;            
+                var handbackResponse = icmsClient.GetLocFilesWithContent(httpClient, true, 4001287).Result;            
                 if (handbackResponse.Equals("Not Found"))
                 {
                     File.WriteAllText(@"Files\Output\HandbackOutput.txt", "Localized file not found");
+                    var handbackFailed = icmsClient.GetLocFilesWithStatus(httpClient, "Handbackfailed", 100).Result;
+                    File.WriteAllText(@"Files\Output\handbackFailed.txt", handbackFailed);
                 }
                 else
                 {
@@ -46,7 +48,7 @@ namespace ICMSConnector
                     File.WriteAllBytes(@"Files\Output\HandbackOutput.txt",Convert.FromBase64String(hbJson["Content"].ToString()));
                     var fileIds = new List<long?> { 4001285 };
                     var resultOfUpdate = icmsClient.SetLocFileStatus(httpClient, "CheckedIn", fileIds, false);
-                }  */
+                }  
             }
             catch (Exception exception)
             {
