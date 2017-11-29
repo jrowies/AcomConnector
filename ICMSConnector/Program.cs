@@ -29,8 +29,10 @@ namespace ICMSConnector
                // var uploadResponse = icmsClient.UploadFile(httpClient).Result;
                // File.WriteAllText(@"Files\Output\FileUploadOutput.txt", uploadResponse);
 
-                //var failedValidation = icmsClient.GetFailedValidationFiles(httpClient);
-               // var validationResponse = failedValidation.Result;
+                //Test validation API to see if any files uploaded have failed validation
+                var failedValidation = icmsClient.GetFailedValidationFiles(httpClient);
+                var validationResponse = failedValidation.Result;
+                File.WriteAllText(@"Files\Output\FilesFailedValidation.txt", validationResponse);
 
 
                 //Get Handback response
