@@ -39,13 +39,12 @@ namespace ICMSConnector.Controllers
                 FileIdentifier = icmsFileIdentifier, //Set File ID data 
                 Localizable = true, 
                 ContentGroup = "GHM", //High level file grouping in ICMS
-                Priority = "",//Localization priority
+                Priority = "1",//Localization priority
                 HostFileTags = "Acom", 
                 ReadyForLoc = true,
                 IsLead = true,
                 LocaleList = new List<string>{ "cs-CZ" },
-                ParentFileIdentifier = null,
-                
+                ParentFileIdentifier = null,               
                 TranslationOptions = new TranslationOptions
                 {
                     RecycleContent = false,
@@ -92,7 +91,7 @@ namespace ICMSConnector.Controllers
         /// <returns></returns>
         public async Task<string> GetFileWithStatus(HttpClient httpClient, string status)
         {
-            var response = await httpClient.GetAsync(string.Format(@"api/Files/Filestatus?status={0}&count={1}", status,100)); //Get Files with status and specify count retrieved
+            var response = await httpClient.GetAsync($"api/Files/Filestatus?status={status}&count={100}"); //Get Files with status and specify count retrieved
             var responseString = response.Content.ReadAsStringAsync();
             return responseString.Result;
         }

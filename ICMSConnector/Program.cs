@@ -26,8 +26,8 @@ namespace ICMSConnector
                 File.WriteAllText(@"Files\Output\PingOutput.txt", responseText);
 
                 //Upload file and write result to a text file
-               // var uploadResponse = icmsClient.UploadFile(httpClient).Result;
-               // File.WriteAllText(@"Files\Output\FileUploadOutput.txt", uploadResponse);
+                //var uploadResponse = icmsClient.UploadFile(httpClient).Result;
+                //File.WriteAllText(@"Files\Output\FileUploadOutput.txt", uploadResponse);
 
                 //Test validation API to see if any files uploaded have failed validation
                 var failedValidation = icmsClient.GetFailedValidationFiles(httpClient);
@@ -48,9 +48,13 @@ namespace ICMSConnector
                 {
                     var hbJson = (JObject)JsonConvert.DeserializeObject(handbackResponse);
                     File.WriteAllBytes(@"Files\Output\HandbackOutput.txt",Convert.FromBase64String(hbJson["Content"].ToString()));
-                    var fileIds = new List<long?> { 4001285 };
-                    var resultOfUpdate = icmsClient.SetLocFileStatus(httpClient, "CheckedIn", fileIds, false);
-                }  
+
+                    //Update successfully handedback file's status to CheckedIn
+                    var fileIds = new List<long?> { hbJson["Metadata"]["LocFileId"].ToObject<long>() };
+                    var resultOfUpdate = icmsClient.SetLocFileStatus(httpClient, "CheckedIn", fileIds, false).Result;
+                    File.WriteAllText(@"Files\Output\UpdateResult.txt",resultOfUpdate);
+
+                } 
             }
             catch (Exception exception)
             {
