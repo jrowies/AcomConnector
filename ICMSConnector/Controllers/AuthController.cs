@@ -16,7 +16,7 @@ namespace ICMSConnector.Controllers
         {
             HttpClient = new HttpClient();
             //The URI to use when connecting to the Translation Service API
-            var translationServiceURI = new Uri(@"https://translationservices.cloudapp.net);
+            var translationServiceURI = new Uri(@"https://translationservices.cloudapp.net");
             var authContext = new AuthenticationContext("https://login.microsoftonline.com/microsoft.onmicrosoft.com");
 
             //Specify authentication information and user credentials to get usable token 
