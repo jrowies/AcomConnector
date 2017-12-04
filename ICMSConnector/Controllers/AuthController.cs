@@ -37,7 +37,7 @@ namespace ICMSConnector.Controllers
             HttpClient.DefaultRequestHeaders.Add("Tenant", "C&E");
 
             //Specify Host Content Store 
-            HttpClient.DefaultRequestHeaders.Add("HostContentStore", "TestNewOrg");          
+            HttpClient.DefaultRequestHeaders.Add("HostContentStore", "TestInProduction");          
 
             //Set up appropriate authorization header
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
